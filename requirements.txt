@@ -1,0 +1,7 @@
+aiogram
+pyrogram
+sqlalchemy
+pydantic
+aiosqlite
+python-dotenv
+alembic

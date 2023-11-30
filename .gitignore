@@ -1,0 +1,8 @@
+Задачи.txt
+.idea
+venv
+.database.db
+database.db
+.env
+**/__pycache__/**
+**.pyc

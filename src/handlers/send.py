@@ -150,9 +150,6 @@ async def get_post_and_send(message: Message, bot: Bot):
                 disable_web_page_preview=True
             )
 
-    print("НУЖНО УДАЛИТЬ:")
-    print(last_media.media_group_id)
-
 
 GLOBAL_NAME_FILES = 1000
 
@@ -171,11 +168,6 @@ async def get_text(message: Message):
 
 @router.channel_post(F.chat.id == POSTS_CHANNEL_ID, F.content_type)
 async def get_media(message: Message, bot: Bot):
-    try:
-        os.mkdir(f"src/media_list/{message.media_group_id}")
-    except FileExistsError:
-        pass
-
     time.sleep(0.25)
     datetime_now = datetime.now()
     print(datetime_now)

@@ -8,6 +8,9 @@ def main_keyboard(user_id: int = 0):
 
     if user_id == 1:
         inline_keyboard_builder.button(text="Управление админами", callback_data="control_admin")
+        inline_keyboard_builder.button(text="Выйти из супер админа", callback_data="logout_super_admin")
+
+    inline_keyboard_builder.adjust(1)
 
     return inline_keyboard_builder.as_markup()
 

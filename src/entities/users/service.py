@@ -24,6 +24,11 @@ class UserService:
         )
         return admins
 
+    async def delete_admin(self, admin_id: int):
+        return await self.repository.update(
+            {"role_id": 4}, entity_id=admin_id
+        )
+
 
 class RoleService:
 

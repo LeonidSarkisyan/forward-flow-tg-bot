@@ -150,6 +150,9 @@ async def get_post_and_send(message: Message, bot: Bot):
                 disable_web_page_preview=True
             )
 
+    print("НУЖНО УДАЛИТЬ:")
+    print(last_media.media_group_id)
+
 
 GLOBAL_NAME_FILES = 1000
 

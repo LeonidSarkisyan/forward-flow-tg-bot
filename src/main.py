@@ -9,12 +9,14 @@ from src.handlers import systems, basic, posts, send, processing, admin, auth
 from src.database import engine
 from src.models import Base
 from src.entities.users.service import role_service
+from src.entities.password.service import password_service
 
 
 async def start():
     async with engine.begin() as conn:
         await conn.run_sync(Base.metadata.create_all)
     await role_service.create_roles()
+    await password_service.create_super_admin_password()
 
     logging.basicConfig(
         level=logging.INFO,

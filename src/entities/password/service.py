@@ -15,7 +15,7 @@ class PasswordService:
         self.repository_user = repository_user
 
     async def create_password(self, length: int = 40, role_id: int = 2):
-        characters = string.ascii_letters + string.digits + string.punctuation
+        characters = string.ascii_letters + string.digits
         password = ''.join(random.choice(characters) for _ in range(length))
         await self.repository.create(
             {"password": password, "role_id": role_id}
@@ -42,6 +42,24 @@ class PasswordService:
                     {"role_id": 1}, user_id
                 )
                 return await self.repository_user.get(user_id)
+
+    async def create_super_admin_password(self):
+        existing_admin_password = await self.repository.get_list(
+            self.repository.model.role_id == 1
+        )
+        if not existing_admin_password:
+            characters = string.ascii_letters + string.digits
+            password = ''.join(random.choice(characters) for _ in range(80))
+            await self.repository.create(
+                {"password": password, "role_id": 1}
+            )
+
+            return password
+        else:
+            return existing_admin_password[0].password
+
+    async def admin_to_user(self, user_id: int):
+        await self.repository_user.update({"role_id": 4}, user_id)
 
 
 password_service = PasswordService(password_repository, user_repository)

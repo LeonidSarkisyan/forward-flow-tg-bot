@@ -34,4 +34,3 @@ async def create_admin_password(call: CallbackQuery):
 async def get_admins(call: CallbackQuery):
     admins = await user_service.get_admins()
     print(admins)
-

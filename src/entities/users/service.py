@@ -20,7 +20,7 @@ class UserService:
 
     async def get_admins(self):
         admins = await self.repository.get_list(
-            self.repository.model.role_id == 1
+            self.repository.model.role_id == 2
         )
         return admins
 

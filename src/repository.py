@@ -2,6 +2,7 @@ from abc import ABC, abstractmethod
 
 from sqlalchemy import insert, select, update, delete
 from sqlalchemy.exc import IntegrityError
+from sqlalchemy.orm import joinedload
 
 from src.database import async_session_maker, Base
 
@@ -10,7 +11,7 @@ class RepositoryInterface:
 
     @abstractmethod
     def __init__(self, model):
-        raise NotImplemented
+        self.model = model
 
     @abstractmethod
     async def create(self, data: dict):
@@ -25,6 +26,10 @@ class RepositoryInterface:
         raise NotImplemented
 
     @abstractmethod
+    async def get_by_filter(self, entity_id: int, *filters):
+        raise NotImplemented
+
+    @abstractmethod
     async def get_list(self, *filters):
         raise NotImplemented
 
@@ -33,7 +38,19 @@ class RepositoryInterface:
         raise NotImplemented
 
     @abstractmethod
+    async def delete_by_filters(self, *filters):
+        raise NotImplemented
+
+    @abstractmethod
     async def bulk_insert(self, data: list):
+        raise NotImplemented
+
+    @abstractmethod
+    async def get_last(self):
+        raise NotImplemented
+
+    @abstractmethod
+    async def get_date(self, *filters):
         raise NotImplemented
 
 
@@ -59,9 +76,27 @@ class SQLAlchemyRepository(RepositoryInterface):
             result = await session.execute(stmt)
             return result.scalars().all()
 
+    async def get_last(self):
+        async with async_session_maker() as session:
+            query = select(self.model).order_by(self.model.id.desc())
+            result = await session.execute(query)
+            return result.scalar()
+
+    async def get_date(self, *filters):
+        async with async_session_maker() as session:
+            query = select(self.model).filter(*filters).order_by(self.model.datetime_created.asc())
+            result = await session.execute(query)
+            return result.scalars()
+
     async def get(self, entity_id: int):
         async with async_session_maker() as session:
             query = select(self.model).where(self.model.id == entity_id)
+            result = await session.execute(query)
+            return result.scalar()
+
+    async def get_by_filter(self, entity_id: int, *filters):
+        async with async_session_maker() as session:
+            query = select(self.model).where(*filters)
             result = await session.execute(query)
             return result.scalar()
 
@@ -88,6 +123,12 @@ class SQLAlchemyRepository(RepositoryInterface):
             else:
                 await session.commit()
                 return result.scalars().all()
+
+    async def delete_by_filters(self, *filters):
+        async with async_session_maker() as session:
+            stmt = delete(self.model).where(*filters)
+            await session.execute(stmt)
+            await session.commit()
 
 
 class IntegrityException(Exception):

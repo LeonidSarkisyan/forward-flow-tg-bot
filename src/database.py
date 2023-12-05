@@ -3,8 +3,8 @@ from sqlalchemy.orm import sessionmaker
 from sqlalchemy.ext.declarative import declarative_base
 
 
-db_path = 'sqlite+aiosqlite:///.database.db'
-engine = create_async_engine(db_path, echo=True)
+db_path = 'sqlite+aiosqlite:///db.db'
+engine = create_async_engine(db_path, echo=False)
 
 async_session_maker = sessionmaker(engine, class_=AsyncSession)
 

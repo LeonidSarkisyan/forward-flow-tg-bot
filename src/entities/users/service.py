@@ -9,11 +9,14 @@ class UserService:
         self.repository = repository
 
     async def add_user(self, user_id: int, username: str):
-        data = {"id": user_id, "username": username, "role_id": 1}
+        data = {"id": user_id, "username": username, "role_id": 4}
         try:
-            await self.repository.create(data)
+            return await self.repository.create(data)
         except IntegrityException:
-            print("Пользователь такой уже есть!")
+            return await self.repository.get(user_id)
+
+    async def get_user(self, user_id: int):
+        return await self.repository.get(user_id)
 
 
 class RoleService:
@@ -25,7 +28,8 @@ class RoleService:
         roles = [
             {"id": 1, "name": "super_admin"},
             {"id": 2, "name": "admin"},
-            {"id": 3, "name": "user"}
+            {"id": 3, "name": "user"},
+            {"id": 4, "name": "guest"}
         ]
         try:
             await self.repository.bulk_insert(roles)

@@ -3,8 +3,9 @@ import asyncio
 
 from aiogram import Bot, Dispatcher
 
+from src.middlewares.base import ProtectMiddleware
 from src.config import BOT_TOKEN
-from src.handlers import systems, basic
+from src.handlers import systems, basic, posts, send, processing, admin, auth
 from src.database import engine
 from src.models import Base
 from src.entities.users.service import role_service
@@ -24,7 +25,13 @@ async def start():
 
     dp = Dispatcher()
 
+    dp.include_router(auth.router)
+    dp.message.middleware.register(ProtectMiddleware())
+    dp.include_router(admin.router)
+    dp.include_router(posts.router)
     dp.include_router(basic.router)
+    dp.include_router(send.router)
+    dp.include_router(processing.router)
 
     dp.startup.register(systems.get_start)
     dp.shutdown.register(systems.get_stop)

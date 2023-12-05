@@ -18,6 +18,12 @@ class UserService:
     async def get_user(self, user_id: int):
         return await self.repository.get(user_id)
 
+    async def get_admins(self):
+        admins = await self.repository.get_list(
+            self.repository.model.role_id == 1
+        )
+        return admins
+
 
 class RoleService:
 

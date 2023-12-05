@@ -5,6 +5,7 @@ from aiogram.types import CallbackQuery
 
 from src.keyboards.admin import get_admin_menu_keyboard
 from src.entities.password.service import password_service
+from src.entities.users.service import user_service
 
 
 router = Router()
@@ -27,4 +28,10 @@ async def create_admin_password(call: CallbackQuery):
         f"После того, как пользователь введёт этот пароль, он самоуничтожится."
     )
     await call.answer()
+
+
+@router.callback_query(F.data == "all_admins")
+async def get_admins(call: CallbackQuery):
+    admins = await user_service.get_admins()
+    print(admins)
 

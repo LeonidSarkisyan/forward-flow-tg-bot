@@ -53,7 +53,10 @@ async def get_post_and_send(message: Message, bot: Bot):
     flow = await flow_service.get_flow_by_parsed_channel_id(parsed_channel_id)
 
     last_media = await media_service.get_last_media()
-    media = await media_service.get_media(last_media.media_group_id)
+    if last_media:
+        media = await media_service.get_media(last_media.media_group_id)
+    else:
+        media = []
 
     media_list = [media_object for media_object in media]
 

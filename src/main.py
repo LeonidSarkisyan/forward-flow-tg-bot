@@ -27,13 +27,14 @@ async def start():
 
     dp = Dispatcher()
 
+    protect_path = [admin.router, posts.router, basic.router, send.router, processing.router]
+
     dp.include_router(auth.router)
-    dp.message.middleware.register(ProtectMiddleware())
-    dp.include_router(admin.router)
-    dp.include_router(posts.router)
-    dp.include_router(basic.router)
-    dp.include_router(send.router)
-    dp.include_router(processing.router)
+
+    for protect_router in protect_path:
+        protect_router.message.middleware.register(ProtectMiddleware())
+        protect_router.callback_query.middleware.register(ProtectMiddleware())
+        dp.include_router(protect_router)
 
     dp.startup.register(systems.get_start)
     dp.shutdown.register(systems.get_stop)

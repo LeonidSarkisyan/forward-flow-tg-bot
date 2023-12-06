@@ -1,12 +1,12 @@
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 
-def main_keyboard(user_id: int = 0):
+def main_keyboard(role_id: int = 0):
     inline_keyboard_builder = InlineKeyboardBuilder()
 
     inline_keyboard_builder.button(text="Управление каналами", callback_data="control_channel")
 
-    if user_id == 1:
+    if role_id == 1:
         inline_keyboard_builder.button(text="Управление админами", callback_data="control_admin")
         inline_keyboard_builder.button(text="Выйти из супер админа", callback_data="logout_super_admin")
 

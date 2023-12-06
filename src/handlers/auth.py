@@ -25,9 +25,16 @@ async def ask_password(call: CallbackQuery, state: FSMContext):
 async def get_password(message: Message, state: FSMContext):
     auth = await password_service.login(message.text, message.from_user.id)
     if auth:
+        if auth.role_id == 1:
+            await message.answer(
+                "Вы зашли как <b>супер-админ</b>.",
+                reply_markup=main_keyboard(auth.role_id)
+            )
         if auth.role_id == 2:
             await message.answer(
-                "Вы зашли как админ.",
-                reply_markup=main_keyboard()
+                "Вы зашли как <b>админ</b>.",
+                reply_markup=main_keyboard(auth.role_id)
             )
-    await state.clear()
+    else:
+        await message.answer("Неверный пароль! Нажми кнопку входа и попробуйте заново.")
+        await state.clear()

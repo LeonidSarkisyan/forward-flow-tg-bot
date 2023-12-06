@@ -5,7 +5,7 @@ from aiogram import Bot, Dispatcher
 
 from src.middlewares.base import ProtectMiddleware
 from src.config import BOT_TOKEN
-from src.handlers import systems, basic, posts, send, processing, admin, auth
+from src.handlers import systems, basic, posts, send, processing, admin, auth, site
 from src.database import engine
 from src.models import Base
 from src.entities.users.service import role_service
@@ -27,7 +27,9 @@ async def start():
 
     dp = Dispatcher()
 
-    protect_path = [admin.router, posts.router, basic.router, send.router, processing.router]
+    protect_path = [
+        admin.router, posts.router, basic.router, send.router, processing.router, site.router
+    ]
 
     dp.include_router(auth.router)
 

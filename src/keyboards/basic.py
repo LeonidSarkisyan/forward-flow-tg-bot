@@ -5,6 +5,7 @@ def main_keyboard(role_id: int = 0):
     inline_keyboard_builder = InlineKeyboardBuilder()
 
     inline_keyboard_builder.button(text="Управление каналами", callback_data="control_channel")
+    inline_keyboard_builder.button(text="Управление сайтами", callback_data="control_site")
 
     if role_id == 1:
         inline_keyboard_builder.button(text="Управление админами", callback_data="control_admin")
